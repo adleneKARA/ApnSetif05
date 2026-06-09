@@ -1,0 +1,433 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  Users, BookOpen, Briefcase, ShieldCheck, TrendingUp, Handshake, MapPin, 
+  Phone, ArrowLeft, CheckCircle, Clock, CalendarDays, MessageSquare, 
+  Download, Share2, PlayCircle, Map, Send, MessageCircle
+} from 'lucide-react';
+
+export default function App() {
+  const [formStatus, setFormStatus] = useState('');
+  const [referralCode, setReferralCode] = useState('');
+  const [activeDistrict, setActiveDistrict] = useState(0);
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  // Countdown Timer Logic (Target: July 2, 2026)
+  useEffect(() => {
+    const targetDate = new Date("2026-07-02T08:00:00").getTime();
+
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance > 0) {
+        setTimeLeft({
+          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((distance % (1000 * 60)) / 1000)
+        });
+      } else {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Gamified Form Submit
+  const handleJoinSubmit = (e) => {
+    e.preventDefault();
+    // Generate a pseudo-random referral code
+    const code = "SETIF-" + Math.random().toString(36).substring(2, 6).toUpperCase();
+    setReferralCode(code);
+    setFormStatus('success');
+  };
+
+  const handleAskSubmit = (e) => {
+    e.preventDefault();
+    alert("تم إرسال سؤالك بنجاح! سيجيب عنه المرشحون قريباً.");
+    e.target.reset();
+  };
+
+  const districts = [
+    { name: 'سطيف المركز', focus: 'رقمنة الإدارة المحلية، فك الاختناق المروري، وتطوير أقطاب حضرية ذكية.' },
+    { name: 'العلمة', focus: 'تنظيم الفضاءات التجارية، دعم الاستثمار، وتوفير مناطق نشاطات جديدة للشباب.' },
+    { name: 'بوقاعة', focus: 'دعم القطاع الفلاحي والصحي، وتحسين البنية التحتية للقرى المجاورة.' },
+    { name: 'عين ولمان', focus: 'الاهتمام بالمرافق الشبانية والرياضية، ودعم الصناعات الخفيفة.' }
+  ];
+
+  const agenda = [
+    { date: '15 جوان', title: 'العمل الجواري بأسواق العلمة', type: 'ميداني' },
+    { date: '18 جوان', title: 'لقاء مفتوح مع شباب سطيف', type: 'تجمع' },
+    { date: '21 جوان', title: 'بث مباشر للإجابة على أسئلتكم', type: 'رقمي' },
+    { date: '28 جوان', title: 'التجمع الشعبي الختامي الكبرى', type: 'تجمع' }
+  ];
+
+  return (
+    <div className="min-h-screen bg-slate-50 font-sans pb-16 md:pb-0" dir="rtl">
+      {/* Floating WhatsApp Button */}
+      <a href="https://wa.me/213000000000" target="_blank" rel="noreferrer" className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition z-50 flex items-center justify-center animate-bounce">
+        <MessageCircle size={32} />
+      </a>
+
+      {/* Navbar */}
+      <nav className="bg-white shadow-md sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center h-20">
+            <div className="flex items-center gap-3">
+              <div className="bg-orange-600 text-white p-2 rounded-lg font-bold text-2xl shadow-sm">05</div>
+              <div className="flex flex-col">
+                <span className="font-extrabold text-2xl text-slate-800 tracking-tight">ثِقَــــة</span>
+                <span className="text-xs text-orange-600 font-semibold">حركة مجتمع السلم - سطيف</span>
+              </div>
+            </div>
+            <div className="hidden lg:flex space-x-6 space-x-reverse text-slate-600 font-medium text-sm">
+              <a href="#home" className="hover:text-orange-600">الرئيسية</a>
+              <a href="#candidates" className="hover:text-orange-600">المرشحون</a>
+              <a href="#local" className="hover:text-orange-600">سطيف منطقتي</a>
+              <a href="#agenda" className="hover:text-orange-600">الأجندة</a>
+              <a href="#media-kit" className="hover:text-orange-600">الحقيبة الرقمية</a>
+            </div>
+            <a href="#join" className="bg-slate-900 hover:bg-slate-800 text-white px-5 py-2 rounded-full font-bold transition text-sm">
+              التطوع للحملة
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      {/* Countdown Banner */}
+      <div className="bg-gradient-to-r from-orange-600 to-orange-500 text-white py-4 shadow-inner">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8">
+          <div className="flex items-center gap-2 font-bold text-lg">
+            <Clock size={24} />
+            <span>يوم الحسم: 2 جويلية 2026</span>
+          </div>
+          <div className="flex gap-4" dir="ltr">
+            <div className="bg-white/20 px-3 py-1 rounded-lg text-center backdrop-blur-sm">
+              <span className="block text-2xl font-black">{timeLeft.seconds}</span>
+              <span className="text-xs">ثانية</span>
+            </div>
+            <div className="bg-white/20 px-3 py-1 rounded-lg text-center backdrop-blur-sm">
+              <span className="block text-2xl font-black">{timeLeft.minutes}</span>
+              <span className="text-xs">دقيقة</span>
+            </div>
+            <div className="bg-white/20 px-3 py-1 rounded-lg text-center backdrop-blur-sm">
+              <span className="block text-2xl font-black">{timeLeft.hours}</span>
+              <span className="text-xs">ساعة</span>
+            </div>
+            <div className="bg-white/20 px-3 py-1 rounded-lg text-center backdrop-blur-sm">
+              <span className="block text-2xl font-black">{timeLeft.days}</span>
+              <span className="text-xs">يوم</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Hero Section */}
+      <section id="home" className="relative bg-white py-12 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 text-orange-700 rounded-full text-sm font-bold">
+              <ShieldCheck size={18} />
+              الكفاءة، الميدان، ونظافة اليد
+            </div>
+            <h1 className="text-4xl md:text-6xl font-black text-slate-800 leading-tight">
+              لأن سطيف العالي تستحق <span className="text-orange-600 block mt-2">قيادة استراتيجية</span>
+            </h1>
+            <p className="text-lg text-slate-600 leading-relaxed border-r-4 border-orange-500 pr-4">
+              مشروعنا ليس مجرد وعود، بل هو تكامل بين "التسيير العمومي" للإدارة المحلية، و"المالية" لرقابة المال العام. نضع بين أيديكم خبرة ميدانية وأكاديمية قادرة على إحداث الفارق.
+            </p>
+            <div className="flex flex-wrap gap-4 pt-4">
+              <a href="#join" className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-full font-bold transition flex items-center gap-2 shadow-lg shadow-orange-200">
+                ادعم القائمة 05
+              </a>
+              <a href="#ask" className="bg-slate-100 hover:bg-slate-200 text-slate-800 px-8 py-3 rounded-full font-bold transition flex items-center gap-2">
+                اسأل مرشحيك <MessageSquare size={20} />
+              </a>
+            </div>
+          </div>
+          
+          {/* Candidates Visual Card */}
+          <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-[2rem] shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMSIvPjwvc3ZnPg==')]"></div>
+            <div className="relative z-10">
+              <div className="text-center mb-8">
+                <h3 className="text-4xl font-black text-white mb-2">انتخب <span className="text-orange-500">05</span></h3>
+                <p className="text-slate-400 font-medium">الانتخابات التشريعية 2 جويلية 2026</p>
+              </div>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="bg-slate-800/80 backdrop-blur border border-slate-700 rounded-2xl p-5 text-center transform transition hover:-translate-y-2">
+                  <div className="w-24 h-24 bg-orange-100 rounded-full mx-auto mb-4 flex items-center justify-center text-orange-600 shadow-inner">
+                    <Briefcase size={40} />
+                  </div>
+                  <h4 className="font-bold text-white text-lg">عبد الله بلعربي</h4>
+                  <p className="text-sm text-orange-400 font-semibold mb-1">38 سنة</p>
+                  <p className="text-xs text-slate-300">ماستر تسيير عمومي<br/>منتخب محلي</p>
+                </div>
+                <div className="bg-slate-800/80 backdrop-blur border border-slate-700 rounded-2xl p-5 text-center transform transition hover:-translate-y-2">
+                  <div className="w-24 h-24 bg-orange-100 rounded-full mx-auto mb-4 flex items-center justify-center text-orange-600 shadow-inner">
+                    <TrendingUp size={40} />
+                  </div>
+                  <h4 className="font-bold text-white text-lg">زكرياء خبشاش</h4>
+                  <p className="text-sm text-orange-400 font-semibold mb-1">38 سنة</p>
+                  <p className="text-xs text-slate-300">ليسانس مالية<br/>منتخب محلي</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Geo-Targeting (Map/Districts Section) */}
+      <section id="local" className="py-16 bg-slate-100">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <Map className="mx-auto text-orange-500 mb-4" size={48} />
+            <h2 className="text-3xl font-extrabold text-slate-800 mb-4">سطيف.. ولاية واحدة، تحديات متعددة</h2>
+            <p className="text-slate-600">برنامجنا مفصل ليتناسب مع احتياجات كل منطقة في ولايتنا الشاسعة.</p>
+          </div>
+          
+          <div className="grid md:grid-cols-4 gap-4">
+            {districts.map((district, idx) => (
+              <div 
+                key={idx}
+                onClick={() => setActiveDistrict(idx)}
+                className={`cursor-pointer p-6 rounded-2xl border-2 transition-all ${activeDistrict === idx ? 'bg-orange-600 border-orange-600 text-white shadow-lg transform -translate-y-1' : 'bg-white border-slate-200 text-slate-700 hover:border-orange-300'}`}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <MapPin size={20} className={activeDistrict === idx ? 'text-orange-200' : 'text-orange-500'} />
+                  <h3 className="font-bold text-lg">{district.name}</h3>
+                </div>
+                <p className={`text-sm leading-relaxed ${activeDistrict === idx ? 'text-orange-50' : 'text-slate-500'}`}>
+                  {district.focus}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Middle Section: Agenda & Ask */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12">
+          
+          {/* Campaign Agenda */}
+          <div id="agenda">
+            <div className="flex items-center gap-3 mb-8">
+              <CalendarDays className="text-orange-500" size={32} />
+              <h2 className="text-3xl font-bold text-slate-800">أجندة الحملة</h2>
+            </div>
+            <div className="space-y-4">
+              {agenda.map((item, idx) => (
+                <div key={idx} className="flex bg-slate-50 border border-slate-100 rounded-xl overflow-hidden hover:shadow-md transition">
+                  <div className="bg-orange-500 text-white p-4 flex flex-col justify-center items-center w-24 shrink-0">
+                    <span className="text-sm font-medium">جوان</span>
+                    <span className="text-2xl font-black">{item.date.split(' ')[0]}</span>
+                  </div>
+                  <div className="p-4 flex flex-col justify-center">
+                    <span className="text-xs font-bold text-orange-600 mb-1 px-2 py-0.5 bg-orange-100 rounded-full inline-block w-fit">{item.type}</span>
+                    <h4 className="font-bold text-slate-800">{item.title}</h4>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Ask the Candidates */}
+          <div id="ask" className="bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden">
+            <div className="absolute -right-10 -top-10 text-slate-800 opacity-50">
+              <MessageSquare size={150} />
+            </div>
+            <div className="relative z-10">
+              <h2 className="text-3xl font-bold mb-2">اسأل مرشحيك</h2>
+              <p className="text-slate-400 mb-6 text-sm">نؤمن بالشفافية المطلقة. اطرح سؤالك الآن، وسيتم الإجابة عن أبرز الأسئلة في بث مباشر دوري.</p>
+              
+              <form onSubmit={handleAskSubmit} className="space-y-4">
+                <div>
+                  <input type="text" placeholder="اسمك (اختياري)" className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-orange-500" />
+                </div>
+                <div>
+                  <textarea required rows="3" placeholder="اكتب سؤالك هنا..." className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-orange-500 resize-none"></textarea>
+                </div>
+                <button type="submit" className="bg-orange-600 hover:bg-orange-500 text-white px-6 py-3 rounded-lg font-bold w-full flex justify-center items-center gap-2 transition">
+                  إرسال السؤال <Send size={18} />
+                </button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Social Proof (Wall of Support) */}
+      <section className="py-16 bg-slate-50 border-t border-slate-200">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-extrabold text-slate-800 mb-4">صوت السطايفية</h2>
+            <p className="text-slate-600">ماذا يقول أبناء ولايتنا عن قائمة حركة مجتمع السلم رقم 05؟</p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+              <div className="flex text-orange-400 mb-4">
+                {'★★★★★'}
+              </div>
+              <p className="text-slate-600 mb-4 font-medium italic">"زكرياء وعبد الله شباب نظاف، يفهموا في الأرقام وفي التسيير. سطيف محتاجة لهاد الكفاءات باش تطور، يستاهلوا كل الدعم."</p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-slate-200 rounded-full"></div>
+                <div>
+                  <h5 className="font-bold text-slate-800 text-sm">أحمد. م</h5>
+                  <span className="text-xs text-slate-500">تاجر بالعلمة</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+              <div className="flex text-orange-400 mb-4">
+                {'★★★★★'}
+              </div>
+              <p className="text-slate-600 mb-4 font-medium italic">"كمواطن، يعجبني فيهم أنهم كبروا في الجمعيات والكشافة، يعني قراب للزوالي وماهمش معزولين في المكاتب. صوتي للقائمة 05 بدون تردد."</p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-slate-200 rounded-full"></div>
+                <div>
+                  <h5 className="font-bold text-slate-800 text-sm">كمال. ب</h5>
+                  <span className="text-xs text-slate-500">أستاذ وعضو جمعوي</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-center items-center text-center group cursor-pointer hover:bg-orange-50 transition">
+              <div className="w-16 h-16 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                <PlayCircle size={32} />
+              </div>
+              <h5 className="font-bold text-slate-800">شاهد آراء المواطنين</h5>
+              <p className="text-xs text-slate-500 mt-1">اضغط لمشاهدة الفيديو</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Gamified Join Form & Media Kit */}
+      <section id="join" className="py-20 bg-orange-600">
+        <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-5 gap-8">
+          
+          {/* Volunteer Form */}
+          <div className="md:col-span-3 bg-white rounded-3xl p-8 shadow-2xl">
+            <h3 className="text-2xl font-black text-slate-800 mb-2">كن جزءاً من آلة التغيير</h3>
+            <p className="text-slate-500 mb-8 text-sm">سجل معنا الآن، كن مندوباً في صندوق الاقتراع، أو متطوعاً إلكترونياً.</p>
+            
+            {formStatus === 'success' ? (
+              <div className="text-center py-8">
+                <div className="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle size={40} />
+                </div>
+                <h4 className="font-bold text-2xl text-slate-800 mb-2">مرحباً بك في الفريق!</h4>
+                <p className="text-slate-600 mb-6">تم تسجيل بياناتك. لنصنع الفارق معاً.</p>
+                
+                <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                  <h5 className="font-bold text-slate-800 mb-2 flex items-center justify-center gap-2">
+                    <Share2 size={18} className="text-orange-500" /> ضاعف تأثيرك!
+                  </h5>
+                  <p className="text-sm text-slate-500 mb-4">شارك هذا الرمز مع 5 من أصدقائك لدعوتهم لدعم القائمة. أكثر الداعمين نشاطاً سيتم تكريمهم بعد الانتخابات.</p>
+                  <div className="bg-white border-2 border-dashed border-orange-300 py-3 rounded-lg text-2xl font-mono font-bold tracking-widest text-orange-600 mb-4">
+                    {referralCode}
+                  </div>
+                  <button className="text-sm font-bold text-slate-700 bg-slate-200 px-4 py-2 rounded-lg hover:bg-slate-300 transition">
+                    نسخ الرابط ومشاركته
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleJoinSubmit} className="space-y-5">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-1">الاسم الكامل</label>
+                    <input type="text" required className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-1">رقم الهاتف</label>
+                    <input type="tel" required className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition" dir="ltr" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">البلدية</label>
+                  <select required className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition">
+                    <option value="">اختر بلديتك...</option>
+                    <option>سطيف</option><option>العلمة</option><option>عين ولمان</option><option>بوقاعة</option><option>أخرى</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">كيف يمكنك المساعدة؟</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <label className="flex items-center gap-2 p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50">
+                      <input type="radio" name="help" className="accent-orange-600 w-4 h-4" /> <span className="text-sm font-medium">دعم رقمي (سوشيال ميديا)</span>
+                    </label>
+                    <label className="flex items-center gap-2 p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50">
+                      <input type="radio" name="help" className="accent-orange-600 w-4 h-4" /> <span className="text-sm font-medium">مراقب صندوق (2 جويلية)</span>
+                    </label>
+                  </div>
+                </div>
+                <button type="submit" className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-xl transition shadow-lg mt-2 text-lg">
+                  تسجيل الانضمام
+                </button>
+              </form>
+            )}
+          </div>
+
+          {/* Media Kit */}
+          <div id="media-kit" className="md:col-span-2 flex flex-col justify-center text-white">
+            <h3 className="text-3xl font-black mb-4">الحقيبة الرقمية</h3>
+            <p className="text-orange-100 mb-8 leading-relaxed">أنت سفيرنا! حمّل المواد الإعلامية للحملة واستخدمها في حساباتك الشخصية لتوسيع دائرة الدعم.</p>
+            
+            <div className="space-y-4">
+              <button className="w-full flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/20 p-4 rounded-xl backdrop-blur-sm transition">
+                <div className="flex items-center gap-3">
+                  <div className="bg-white/20 p-2 rounded-lg"><Share2 size={20} /></div>
+                  <span className="font-bold">إطار صورة بروفايل فيسبوك</span>
+                </div>
+                <Download size={20} />
+              </button>
+              <button className="w-full flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/20 p-4 rounded-xl backdrop-blur-sm transition">
+                <div className="flex items-center gap-3">
+                  <div className="bg-white/20 p-2 rounded-lg"><Download size={20} /></div>
+                  <span className="font-bold">ملصقات جاهزة للطباعة (PDF)</span>
+                </div>
+                <Download size={20} />
+              </button>
+              <button className="w-full flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/20 p-4 rounded-xl backdrop-blur-sm transition">
+                <div className="flex items-center gap-3">
+                  <div className="bg-white/20 p-2 rounded-lg"><MessageCircle size={20} /></div>
+                  <span className="font-bold">صور حالات واتساب/ستوري</span>
+                </div>
+                <Download size={20} />
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-slate-900 text-slate-400 py-12">
+        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8 items-center text-center md:text-right">
+          <div className="flex flex-col items-center md:items-start">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="bg-white text-orange-600 p-1.5 rounded-md font-bold text-xl">05</div>
+              <span className="font-extrabold text-2xl text-white tracking-tight">ثِقَــــة</span>
+            </div>
+            <p className="text-sm max-w-xs">الحملة الانتخابية لمرشحي حركة مجتمع السلم لولاية سطيف - تشريعيات 2 جويلية 2026.</p>
+          </div>
+          <div className="space-x-4 space-x-reverse text-sm">
+            <a href="#" className="hover:text-white transition">سياسة الخصوصية</a>
+            <span>|</span>
+            <a href="#" className="hover:text-white transition">شروط التطوع</a>
+          </div>
+          <div dir="ltr" className="text-sm font-medium">
+            <p>© 2026 List 05 - Setif.</p>
+            <p className="text-xs text-slate-600 mt-1">Powered by Grassroots Engine</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
