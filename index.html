@@ -1,433 +1,1018 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Users, BookOpen, Briefcase, ShieldCheck, TrendingUp, Handshake, MapPin, 
-  Phone, ArrowLeft, CheckCircle, Clock, CalendarDays, MessageSquare, 
-  Download, Share2, PlayCircle, Map, Send, MessageCircle
-} from 'lucide-react';
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ثِقَة | الحملة الانتخابية - سطيف</title>
+  <style>
+    :root {
+      --orange: #ea580c;
+      --orange-2: #f97316;
+      --orange-3: #ffedd5;
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-400: #94a3b8;
+      --slate-500: #64748b;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --green: #22c55e;
+      --white: #ffffff;
+      --shadow-sm: 0 2px 10px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 12px 30px rgba(15, 23, 42, 0.10);
+      --shadow-xl: 0 28px 70px rgba(15, 23, 42, 0.22);
+      --radius-xl: 22px;
+      --radius-2xl: 32px;
+      --max: 1180px;
+    }
 
-export default function App() {
-  const [formStatus, setFormStatus] = useState('');
-  const [referralCode, setReferralCode] = useState('');
-  const [activeDistrict, setActiveDistrict] = useState(0);
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--slate-50);
+      color: var(--slate-800);
+      font-family: "Alexandria", "Noto Kufi Arabic", "Tahoma", "Arial", sans-serif;
+      line-height: 1.7;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    .container { width: min(var(--max), calc(100% - 32px)); margin-inline: auto; }
+    .grid { display: grid; }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .five { grid-template-columns: 3fr 2fr; }
+    .gap-12 { gap: 48px; }
+    .gap-8 { gap: 32px; }
+    .gap-6 { gap: 24px; }
+    .gap-4 { gap: 16px; }
+    .hidden { display: none !important; }
 
-  // Countdown Timer Logic (Target: July 2, 2026)
-  useEffect(() => {
-    const targetDate = new Date("2026-07-02T08:00:00").getTime();
+    .whatsapp {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 80;
+      width: 64px;
+      height: 64px;
+      border-radius: 999px;
+      background: var(--green);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 29px;
+      box-shadow: var(--shadow-xl);
+      animation: bounce 1.8s ease-in-out infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
 
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
+    .navbar {
+      background: rgba(255,255,255,.96);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 70;
+      backdrop-filter: blur(12px);
+    }
+    .nav-inner {
+      height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: max-content; }
+    .badge-05 {
+      background: var(--orange);
+      color: white;
+      border-radius: 12px;
+      width: 50px;
+      height: 50px;
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      font-weight: 900;
+      box-shadow: 0 10px 22px rgba(234, 88, 12, .25);
+    }
+    .brand-title { font-weight: 900; font-size: 28px; letter-spacing: -1px; color: var(--slate-800); line-height: 1.05; }
+    .brand-subtitle { color: var(--orange); font-size: 12px; font-weight: 800; }
+    .nav-links { display: flex; align-items: center; gap: 22px; color: var(--slate-600); font-weight: 800; font-size: 14px; }
+    .nav-links a:hover { color: var(--orange); }
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 21px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: .2s ease;
+      white-space: nowrap;
+    }
+    .btn-dark { background: var(--slate-900); color: white; }
+    .btn-dark:hover { background: var(--slate-800); transform: translateY(-1px); }
+    .btn-orange { background: var(--orange); color: white; box-shadow: 0 14px 32px rgba(234, 88, 12, .25); }
+    .btn-orange:hover { background: #c2410c; transform: translateY(-1px); }
+    .btn-light { background: var(--slate-100); color: var(--slate-800); }
+    .btn-light:hover { background: var(--slate-200); transform: translateY(-1px); }
 
-      if (distance > 0) {
-        setTimeLeft({
-          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((distance % (1000 * 60)) / 1000)
-        });
-      } else {
-        clearInterval(interval);
-      }
-    }, 1000);
+    .countdown-bar {
+      background: linear-gradient(90deg, var(--orange), var(--orange-2));
+      color: white;
+      padding: 18px 0;
+      box-shadow: inset 0 -10px 22px rgba(0,0,0,.08);
+    }
+    .countdown-inner { display: flex; justify-content: center; align-items: center; gap: 32px; flex-wrap: wrap; }
+    .countdown-title { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 900; }
+    .timer { display: flex; gap: 12px; direction: ltr; }
+    .timebox {
+      min-width: 72px;
+      padding: 7px 10px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.20);
+      border-radius: 14px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+    .timebox strong { display: block; font-size: 28px; line-height: 1.1; }
+    .timebox span { font-size: 11px; opacity: .95; }
 
-    return () => clearInterval(interval);
-  }, []);
+    .hero { background: white; padding: 72px 0; overflow: hidden; }
+    .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(360px, .95fr); align-items: center; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #c2410c;
+      background: var(--orange-3);
+      border: 1px solid #fed7aa;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-weight: 900;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: clamp(38px, 5vw, 68px);
+      line-height: 1.12;
+      letter-spacing: -1.5px;
+      margin: 0 0 18px;
+      color: var(--slate-800);
+      font-weight: 950;
+    }
+    h1 span { display: block; color: var(--orange); margin-top: 6px; }
+    .lead {
+      color: var(--slate-600);
+      font-size: 18px;
+      max-width: 690px;
+      border-right: 5px solid var(--orange);
+      padding-right: 18px;
+      margin: 0 0 28px;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 14px; }
 
-  // Gamified Form Submit
-  const handleJoinSubmit = (e) => {
-    e.preventDefault();
-    // Generate a pseudo-random referral code
-    const code = "SETIF-" + Math.random().toString(36).substring(2, 6).toUpperCase();
-    setReferralCode(code);
-    setFormStatus('success');
-  };
+    .candidate-panel {
+      position: relative;
+      background: radial-gradient(circle at top left, rgba(249, 115, 22, .22), transparent 32%), linear-gradient(135deg, var(--slate-800), var(--slate-900));
+      color: white;
+      border-radius: var(--radius-2xl);
+      padding: 30px;
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .candidate-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,.13) 1px, transparent 1px);
+      background-size: 22px 22px;
+      opacity: .55;
+      z-index: -1;
+    }
+    .panel-title { text-align: center; margin-bottom: 28px; }
+    .panel-title h2 { margin: 0; font-size: 42px; line-height: 1.15; }
+    .panel-title h2 span { color: var(--orange-2); }
+    .panel-title p { color: var(--slate-300); margin: 5px 0 0; }
+    .candidate-cards { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 22px; }
+    .candidate-card {
+      background: rgba(30, 41, 59, .72);
+      border: 1px solid rgba(148, 163, 184, .25);
+      border-radius: 24px;
+      padding: 22px;
+      text-align: center;
+      transition: .25s ease;
+    }
+    .candidate-card:hover { transform: translateY(-8px); background: rgba(30, 41, 59, .90); }
+    .avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 999px;
+      background: #ffedd5;
+      color: var(--orange);
+      display: grid;
+      place-items: center;
+      margin: 0 auto 14px;
+      font-size: 44px;
+      box-shadow: inset 0 0 0 8px rgba(255,255,255,.42);
+    }
+    .candidate-card h3 { margin: 0; font-size: 20px; }
+    .candidate-card .age { color: #fb923c; font-weight: 900; font-size: 14px; margin: 4px 0; }
+    .candidate-card p { color: var(--slate-300); font-size: 13px; margin: 0; }
 
-  const handleAskSubmit = (e) => {
-    e.preventDefault();
-    alert("تم إرسال سؤالك بنجاح! سيجيب عنه المرشحون قريباً.");
-    e.target.reset();
-  };
+    section { scroll-margin-top: 96px; }
+    .local { padding: 72px 0; background: var(--slate-100); overflow: hidden; }
+    .section-head { text-align: center; max-width: 720px; margin: 0 auto 44px; }
+    .section-icon { color: var(--orange); font-size: 48px; margin-bottom: 10px; }
+    .section-head h2 { margin: 0 0 10px; font-size: clamp(30px, 4vw, 42px); line-height: 1.2; color: var(--slate-800); }
+    .section-head p { margin: 0; color: var(--slate-600); font-weight: 700; }
 
-  const districts = [
-    { name: 'سطيف المركز', focus: 'رقمنة الإدارة المحلية، فك الاختناق المروري، وتطوير أقطاب حضرية ذكية.' },
-    { name: 'العلمة', focus: 'تنظيم الفضاءات التجارية، دعم الاستثمار، وتوفير مناطق نشاطات جديدة للشباب.' },
-    { name: 'بوقاعة', focus: 'دعم القطاع الفلاحي والصحي، وتحسين البنية التحتية للقرى المجاورة.' },
-    { name: 'عين ولمان', focus: 'الاهتمام بالمرافق الشبانية والرياضية، ودعم الصناعات الخفيفة.' }
-  ];
+    .map-shell {
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius-2xl);
+      padding: 28px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+    .map-zone {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1.15 / 1;
+      min-height: 520px;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 22% 20%, rgba(234, 88, 12, .10), transparent 22%),
+        radial-gradient(circle at 80% 70%, rgba(234, 88, 12, .08), transparent 24%),
+        linear-gradient(135deg, #fff7ed 0%, #f8fafc 45%, #eef2ff 100%);
+      overflow: hidden;
+    }
+    .map-shape {
+      position: absolute;
+      inset: 5% 7%;
+      opacity: .22;
+      filter: drop-shadow(0 20px 15px rgba(15,23,42,.15));
+    }
+    .map-shape svg { width: 100%; height: 100%; }
+    .pin-wrap { position: absolute; transform: translate(-50%, -50%); z-index: 3; }
+    .pin-button {
+      border: none;
+      background: transparent;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      transform-origin: center;
+      transition: .2s ease;
+      color: var(--slate-500);
+    }
+    .pin-button:hover, .pin-button.active { transform: scale(1.22); color: var(--orange); }
+    .pin-dot {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px 999px 999px 0;
+      background: white;
+      border: 4px solid currentColor;
+      box-shadow: 0 12px 18px rgba(15,23,42,.15);
+      transform: rotate(-45deg);
+      position: relative;
+    }
+    .pin-dot::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: currentColor;
+      position: absolute;
+      inset: 50% auto auto 50%;
+      transform: translate(-50%, -50%);
+    }
+    .pin-name {
+      background: rgba(255,255,255,.88);
+      color: var(--slate-700);
+      border: 1px solid rgba(226,232,240,.85);
+      border-radius: 10px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+      box-shadow: var(--shadow-sm);
+      opacity: 0;
+      transition: .2s ease;
+      pointer-events: none;
+    }
+    .pin-button:hover .pin-name, .pin-button.active .pin-name { opacity: 1; }
+    .pin-button.active .pin-name { background: var(--orange); color: white; border-color: var(--orange); }
+    .popup {
+      position: absolute;
+      width: min(320px, calc(100vw - 56px));
+      background: rgba(15, 23, 42, .96);
+      color: white;
+      border: 1px solid rgba(148, 163, 184, .25);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: var(--shadow-xl);
+      z-index: 20;
+      animation: zoomIn .15s ease both;
+    }
+    @keyframes zoomIn { from { transform: scale(.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .popup h3 { margin: 0 0 8px; line-height: 1.25; font-size: 21px; padding-left: 28px; }
+    .popup h3 span { color: #fb923c; }
+    .popup p { margin: 0 0 16px; color: var(--slate-200); font-size: 14px; }
+    .close-popup {
+      position: absolute;
+      top: 10px;
+      left: 12px;
+      border: none;
+      background: transparent;
+      color: var(--slate-400);
+      font-size: 26px;
+      line-height: 1;
+    }
+    .close-popup:hover { color: white; }
 
-  const agenda = [
-    { date: '15 جوان', title: 'العمل الجواري بأسواق العلمة', type: 'ميداني' },
-    { date: '18 جوان', title: 'لقاء مفتوح مع شباب سطيف', type: 'تجمع' },
-    { date: '21 جوان', title: 'بث مباشر للإجابة على أسئلتكم', type: 'رقمي' },
-    { date: '28 جوان', title: 'التجمع الشعبي الختامي الكبرى', type: 'تجمع' }
-  ];
+    .content-section { padding: 72px 0; background: white; }
+    .agenda h2, .ask-card h2 { margin: 0 0 24px; font-size: 34px; line-height: 1.15; }
+    .heading-row { display: flex; align-items: center; gap: 10px; margin-bottom: 26px; }
+    .heading-row h2 { margin: 0; }
+    .event-list { display: grid; gap: 14px; }
+    .event {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      overflow: hidden;
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: 18px;
+      transition: .2s ease;
+    }
+    .event:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .event-date {
+      background: var(--orange);
+      color: white;
+      display: grid;
+      place-items: center;
+      padding: 14px;
+      text-align: center;
+      font-weight: 900;
+    }
+    .event-date small { display: block; font-size: 13px; opacity: .94; }
+    .event-date strong { display: block; font-size: 28px; line-height: 1.05; }
+    .event-body { padding: 16px 18px; display: flex; flex-direction: column; justify-content: center; }
+    .tag { display: inline-block; width: max-content; color: var(--orange); background: var(--orange-3); padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 900; margin-bottom: 5px; }
+    .event-body h3 { margin: 0; font-size: 17px; color: var(--slate-800); }
 
-  return (
-    <div className="min-h-screen bg-slate-50 font-sans pb-16 md:pb-0" dir="rtl">
-      {/* Floating WhatsApp Button */}
-      <a href="https://wa.me/213000000000" target="_blank" rel="noreferrer" className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition z-50 flex items-center justify-center animate-bounce">
-        <MessageCircle size={32} />
+    .ask-card {
+      position: relative;
+      background: var(--slate-900);
+      color: white;
+      border-radius: var(--radius-2xl);
+      padding: 34px;
+      overflow: hidden;
+      min-height: 390px;
+    }
+    .ask-card::before {
+      content: "؟";
+      position: absolute;
+      top: -50px;
+      right: -16px;
+      color: rgba(51, 65, 85, .42);
+      font-size: 260px;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .ask-card > * { position: relative; z-index: 2; }
+    .ask-card p { color: var(--slate-400); font-size: 14px; margin: -12px 0 22px; }
+    .field { display: grid; gap: 7px; margin-bottom: 14px; }
+    .field label { font-size: 14px; font-weight: 900; color: var(--slate-700); }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--slate-200);
+      border-radius: 14px;
+      padding: 13px 15px;
+      outline: none;
+      background: white;
+      color: var(--slate-800);
+      transition: .2s ease;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--orange); box-shadow: 0 0 0 4px rgba(249, 115, 22, .13); }
+    textarea { resize: vertical; min-height: 105px; }
+    .ask-card input, .ask-card textarea {
+      background: var(--slate-800);
+      border-color: var(--slate-700);
+      color: white;
+    }
+    .ask-card input::placeholder, .ask-card textarea::placeholder { color: var(--slate-400); }
+    .full-btn {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 14px 18px;
+      font-weight: 950;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+    .success-box {
+      border-radius: 18px;
+      border: 1px solid rgba(34,197,94,.30);
+      background: rgba(34,197,94,.14);
+      color: #86efac;
+      padding: 16px;
+      font-weight: 900;
+    }
+
+    .join { padding: 80px 0; background: var(--orange); }
+    .join-card {
+      background: white;
+      border-radius: var(--radius-2xl);
+      padding: 34px;
+      box-shadow: var(--shadow-xl);
+    }
+    .join-card h2 { margin: 0 0 5px; font-size: 30px; }
+    .join-card > p { color: var(--slate-500); margin: 0 0 28px; font-size: 14px; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
+    .radio-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+    .radio-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--slate-200);
+      border-radius: 14px;
+      padding: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .radio-box:hover { background: var(--slate-50); }
+    input[type="radio"] { width: 18px; height: 18px; accent-color: var(--orange); box-shadow: none; }
+    .join-success { text-align: center; padding: 28px 0; }
+    .success-icon {
+      width: 84px; height: 84px; border-radius: 999px; background: #dcfce7; color: #16a34a;
+      display: grid; place-items: center; margin: 0 auto 14px; font-size: 42px;
+    }
+    .ref-box { background: var(--slate-50); border: 1px solid var(--slate-200); padding: 22px; border-radius: 22px; margin-top: 18px; }
+    .ref-code { direction: ltr; margin-top: 12px; background: white; border: 2px dashed #fdba74; border-radius: 14px; color: var(--orange); padding: 13px; font-size: 28px; font-weight: 950; letter-spacing: 3px; }
+
+    .media-kit { color: white; display: flex; flex-direction: column; gap: 22px; }
+    .media-kit h2 { font-size: 34px; margin: 0 0 10px; }
+    .media-kit p { color: #ffedd5; margin: 0 0 18px; font-size: 14px; }
+    .download-btn {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.20);
+      background: rgba(255,255,255,.10);
+      color: white;
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      transition: .2s ease;
+      font-weight: 900;
+      text-align: right;
+    }
+    .download-btn:hover { background: rgba(255,255,255,.18); }
+    .ai-card {
+      background: radial-gradient(circle at top right, rgba(249,115,22,.24), transparent 35%), linear-gradient(135deg, var(--slate-800), var(--slate-900));
+      border: 1px solid rgba(253, 186, 116, .32);
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+    .ai-card h3 { margin: 0 0 7px; font-size: 21px; color: white; }
+    .ai-card p { color: var(--slate-400); margin: 0 0 16px; font-size: 12px; }
+    .ai-card input, .ai-card select, .ai-card textarea {
+      background: var(--slate-800);
+      color: white;
+      border-color: var(--slate-600);
+      margin-bottom: 11px;
+    }
+    .ai-card input::placeholder { color: var(--slate-500); }
+    .ai-result {
+      margin-top: 16px;
+      background: var(--slate-800);
+      border: 1px solid var(--slate-600);
+      border-radius: 18px;
+      padding: 16px;
+      color: var(--slate-200);
+      white-space: pre-wrap;
+      font-size: 14px;
+    }
+    .small-note { color: #fdba74 !important; font-size: 11px !important; margin-top: -4px !important; }
+    .error { color: #fca5a5 !important; background: rgba(239,68,68,.12); border: 1px solid rgba(248,113,113,.25); padding: 9px; border-radius: 12px; margin: 8px 0 !important; }
+    .copy-success { color: #86efac !important; text-align: center; font-weight: 900; margin: 8px 0 0 !important; }
+
+    .footer { background: var(--slate-900); color: var(--slate-400); padding: 46px 0; }
+    .footer-grid { display: grid; grid-template-columns: 1.4fr .8fr .8fr; gap: 28px; align-items: center; }
+    .footer .brand-title { color: white; }
+    .footer p { margin: 10px 0 0; max-width: 360px; font-size: 13px; }
+    .footer-links { display: flex; justify-content: center; gap: 12px; font-size: 13px; }
+    .ltr { direction: ltr; text-align: left; }
+
+    @media (max-width: 980px) {
+      .nav-links { display: none; }
+      .hero-grid, .two, .five, .footer-grid { grid-template-columns: 1fr; }
+      .hero { padding: 48px 0; }
+      .candidate-panel { order: -1; }
+      .map-zone { min-height: 520px; }
+      .popup { position: fixed !important; left: 16px !important; right: 16px !important; top: auto !important; bottom: 18px !important; width: auto; transform: none !important; }
+      .footer, .footer .ltr { text-align: center; }
+      .footer .brand { justify-content: center; }
+      .footer p { margin-inline: auto; }
+    }
+    @media (max-width: 640px) {
+      .container { width: min(100% - 22px, var(--max)); }
+      .nav-inner { height: auto; padding: 12px 0; align-items: flex-start; }
+      .brand-title { font-size: 22px; }
+      .brand-subtitle { font-size: 10px; }
+      .badge-05 { width: 44px; height: 44px; font-size: 21px; }
+      .btn { padding: 10px 14px; font-size: 13px; }
+      .timer { gap: 7px; }
+      .timebox { min-width: 62px; padding: 6px 7px; }
+      .timebox strong { font-size: 23px; }
+      .candidate-cards, .form-grid, .radio-grid { grid-template-columns: 1fr; }
+      .candidate-panel, .join-card, .ask-card, .ai-card { padding: 22px; border-radius: 24px; }
+      .map-shell { padding: 12px; border-radius: 24px; }
+      .map-zone { min-height: 470px; aspect-ratio: .72 / 1; }
+      .pin-name { font-size: 10px; }
+      .event { grid-template-columns: 84px 1fr; }
+      .whatsapp { width: 56px; height: 56px; font-size: 25px; right: 16px; bottom: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="whatsapp" href="https://wa.me/213000000000" target="_blank" rel="noreferrer" aria-label="واتساب">☘</a>
+
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a class="brand" href="#home" aria-label="الرئيسية">
+        <div class="badge-05">05</div>
+        <div>
+          <div class="brand-title">ثِقَــــة</div>
+          <div class="brand-subtitle">حركة مجتمع السلم - سطيف</div>
+        </div>
       </a>
+      <div class="nav-links">
+        <a href="#home">الرئيسية</a>
+        <a href="#candidates">مرشحونا للبرلمان</a>
+        <a href="#local">سطيف منطقتي</a>
+        <a href="#agenda">الأجندة</a>
+      </div>
+      <a class="btn btn-dark" href="#join">التطوع للحملة</a>
+    </div>
+  </nav>
 
-      {/* Navbar */}
-      <nav className="bg-white shadow-md sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-between items-center h-20">
-            <div className="flex items-center gap-3">
-              <div className="bg-orange-600 text-white p-2 rounded-lg font-bold text-2xl shadow-sm">05</div>
-              <div className="flex flex-col">
-                <span className="font-extrabold text-2xl text-slate-800 tracking-tight">ثِقَــــة</span>
-                <span className="text-xs text-orange-600 font-semibold">حركة مجتمع السلم - سطيف</span>
-              </div>
-            </div>
-            <div className="hidden lg:flex space-x-6 space-x-reverse text-slate-600 font-medium text-sm">
-              <a href="#home" className="hover:text-orange-600">الرئيسية</a>
-              <a href="#candidates" className="hover:text-orange-600">المرشحون</a>
-              <a href="#local" className="hover:text-orange-600">سطيف منطقتي</a>
-              <a href="#agenda" className="hover:text-orange-600">الأجندة</a>
-              <a href="#media-kit" className="hover:text-orange-600">الحقيبة الرقمية</a>
-            </div>
-            <a href="#join" className="bg-slate-900 hover:bg-slate-800 text-white px-5 py-2 rounded-full font-bold transition text-sm">
-              التطوع للحملة
-            </a>
+  <div class="countdown-bar">
+    <div class="container countdown-inner">
+      <div class="countdown-title">⏱ <span>يوم الحسم: 2 جويلية 2026</span></div>
+      <div class="timer" aria-live="polite">
+        <div class="timebox"><strong id="seconds">0</strong><span>ثانية</span></div>
+        <div class="timebox"><strong id="minutes">0</strong><span>دقيقة</span></div>
+        <div class="timebox"><strong id="hours">0</strong><span>ساعة</span></div>
+        <div class="timebox"><strong id="days">0</strong><span>يوم</span></div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="container grid hero-grid gap-12">
+        <div>
+          <div class="pill">🏛 تشريع فعّال، مرافعة قوية، ورقابة صارمة</div>
+          <h1>لأن سطيف العالي تستحق <span>صوتاً برلمانياً حقيقياً</span></h1>
+          <p class="lead">نحن لا نبيع الوهم بوعود محلية خارج الصلاحيات. مشروع "ثقة" هو التزام بالدفاع عن حصة سطيف من المشاريع الوطنية، وسن قوانين تخدم التنمية، وممارسة رقابة حقيقية على المال العام اعتماداً على الخبرة الإدارية والمالية.</p>
+          <div class="actions">
+            <a href="#join" class="btn btn-orange">ادعم قائمة حركة مجتمع السلم 05</a>
+            <a href="#local" class="btn btn-light">كيف سنرافع عن دائرتك؟ 📍</a>
           </div>
         </div>
-      </nav>
 
-      {/* Countdown Banner */}
-      <div className="bg-gradient-to-r from-orange-600 to-orange-500 text-white py-4 shadow-inner">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8">
-          <div className="flex items-center gap-2 font-bold text-lg">
-            <Clock size={24} />
-            <span>يوم الحسم: 2 جويلية 2026</span>
+        <div id="candidates" class="candidate-panel">
+          <div class="panel-title">
+            <h2>انتخب <span>05</span></h2>
+            <p>لتمثيل ولاية سطيف بالمجلس الشعبي الوطني</p>
           </div>
-          <div className="flex gap-4" dir="ltr">
-            <div className="bg-white/20 px-3 py-1 rounded-lg text-center backdrop-blur-sm">
-              <span className="block text-2xl font-black">{timeLeft.seconds}</span>
-              <span className="text-xs">ثانية</span>
-            </div>
-            <div className="bg-white/20 px-3 py-1 rounded-lg text-center backdrop-blur-sm">
-              <span className="block text-2xl font-black">{timeLeft.minutes}</span>
-              <span className="text-xs">دقيقة</span>
-            </div>
-            <div className="bg-white/20 px-3 py-1 rounded-lg text-center backdrop-blur-sm">
-              <span className="block text-2xl font-black">{timeLeft.hours}</span>
-              <span className="text-xs">ساعة</span>
-            </div>
-            <div className="bg-white/20 px-3 py-1 rounded-lg text-center backdrop-blur-sm">
-              <span className="block text-2xl font-black">{timeLeft.days}</span>
-              <span className="text-xs">يوم</span>
-            </div>
+          <div class="candidate-cards">
+            <article class="candidate-card">
+              <div class="avatar">💼</div>
+              <h3>عبد الله بلعربي</h3>
+              <div class="age">35 سنة</div>
+              <p>ماستر تسيير عمومي يضمن فهماً عميقاً لقوانين الإدارة المحلية والدولة.</p>
+            </article>
+            <article class="candidate-card">
+              <div class="avatar">📈</div>
+              <h3>زكرياء خبشاش</h3>
+              <div class="age">38 سنة</div>
+              <p>خبرة مالية تضمن رقابة دقيقة ومناقشة قوية لقانون المالية السنوي.</p>
+            </article>
           </div>
         </div>
       </div>
+    </section>
 
-      {/* Hero Section */}
-      <section id="home" className="relative bg-white py-12 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 text-orange-700 rounded-full text-sm font-bold">
-              <ShieldCheck size={18} />
-              الكفاءة، الميدان، ونظافة اليد
+    <section id="local" class="local">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-icon">🏛</div>
+          <h2>سطيف.. ولاية بحجم دولة</h2>
+          <p>اضغط على دائرتك في الخريطة لتعرف كيف سنرافع عن مطالبها في قبة البرلمان.</p>
+        </div>
+        <div class="map-shell">
+          <div id="mapZone" class="map-zone" aria-label="خارطة تفاعلية لدوائر سطيف">
+            <div class="map-shape" aria-hidden="true">
+              <svg viewBox="0 0 800 650" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M180 75C242 18 339 23 415 60C488 95 577 82 637 137C703 196 682 290 717 370C760 468 707 556 615 595C522 634 414 609 322 626C224 644 123 616 78 528C34 441 86 349 96 259C104 187 127 124 180 75Z" fill="#0f172a"/>
+                <path d="M190 108C249 61 332 58 399 90C471 125 552 112 611 161C668 208 651 288 687 361C721 431 687 520 606 558C527 596 424 575 333 592C239 610 153 580 113 504C72 427 119 346 126 264C132 198 144 145 190 108Z" fill="#ea580c" opacity=".52"/>
+                <path d="M328 92C350 160 324 220 356 278C388 335 460 359 471 430C485 518 416 572 346 604" stroke="#ffffff" stroke-width="12" stroke-linecap="round" opacity=".55"/>
+                <path d="M126 285C220 303 302 282 386 308C497 343 571 410 690 389" stroke="#ffffff" stroke-width="10" stroke-linecap="round" opacity=".48"/>
+                <path d="M206 506C251 450 287 397 329 338C369 282 446 205 574 160" stroke="#ffffff" stroke-width="9" stroke-linecap="round" opacity=".38"/>
+              </svg>
             </div>
-            <h1 className="text-4xl md:text-6xl font-black text-slate-800 leading-tight">
-              لأن سطيف العالي تستحق <span className="text-orange-600 block mt-2">قيادة استراتيجية</span>
-            </h1>
-            <p className="text-lg text-slate-600 leading-relaxed border-r-4 border-orange-500 pr-4">
-              مشروعنا ليس مجرد وعود، بل هو تكامل بين "التسيير العمومي" للإدارة المحلية، و"المالية" لرقابة المال العام. نضع بين أيديكم خبرة ميدانية وأكاديمية قادرة على إحداث الفارق.
-            </p>
-            <div className="flex flex-wrap gap-4 pt-4">
-              <a href="#join" className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-full font-bold transition flex items-center gap-2 shadow-lg shadow-orange-200">
-                ادعم القائمة 05
-              </a>
-              <a href="#ask" className="bg-slate-100 hover:bg-slate-200 text-slate-800 px-8 py-3 rounded-full font-bold transition flex items-center gap-2">
-                اسأل مرشحيك <MessageSquare size={20} />
-              </a>
-            </div>
-          </div>
-          
-          {/* Candidates Visual Card */}
-          <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-[2rem] shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMSIvPjwvc3ZnPg==')]"></div>
-            <div className="relative z-10">
-              <div className="text-center mb-8">
-                <h3 className="text-4xl font-black text-white mb-2">انتخب <span className="text-orange-500">05</span></h3>
-                <p className="text-slate-400 font-medium">الانتخابات التشريعية 2 جويلية 2026</p>
-              </div>
-              <div className="grid grid-cols-2 gap-6">
-                <div className="bg-slate-800/80 backdrop-blur border border-slate-700 rounded-2xl p-5 text-center transform transition hover:-translate-y-2">
-                  <div className="w-24 h-24 bg-orange-100 rounded-full mx-auto mb-4 flex items-center justify-center text-orange-600 shadow-inner">
-                    <Briefcase size={40} />
-                  </div>
-                  <h4 className="font-bold text-white text-lg">عبد الله بلعربي</h4>
-                  <p className="text-sm text-orange-400 font-semibold mb-1">38 سنة</p>
-                  <p className="text-xs text-slate-300">ماستر تسيير عمومي<br/>منتخب محلي</p>
-                </div>
-                <div className="bg-slate-800/80 backdrop-blur border border-slate-700 rounded-2xl p-5 text-center transform transition hover:-translate-y-2">
-                  <div className="w-24 h-24 bg-orange-100 rounded-full mx-auto mb-4 flex items-center justify-center text-orange-600 shadow-inner">
-                    <TrendingUp size={40} />
-                  </div>
-                  <h4 className="font-bold text-white text-lg">زكرياء خبشاش</h4>
-                  <p className="text-sm text-orange-400 font-semibold mb-1">38 سنة</p>
-                  <p className="text-xs text-slate-300">ليسانس مالية<br/>منتخب محلي</p>
-                </div>
-              </div>
-            </div>
+            <div id="districtPins"></div>
+            <div id="districtPopup" class="hidden"></div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      {/* Geo-Targeting (Map/Districts Section) */}
-      <section id="local" className="py-16 bg-slate-100">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <Map className="mx-auto text-orange-500 mb-4" size={48} />
-            <h2 className="text-3xl font-extrabold text-slate-800 mb-4">سطيف.. ولاية واحدة، تحديات متعددة</h2>
-            <p className="text-slate-600">برنامجنا مفصل ليتناسب مع احتياجات كل منطقة في ولايتنا الشاسعة.</p>
-          </div>
-          
-          <div className="grid md:grid-cols-4 gap-4">
-            {districts.map((district, idx) => (
-              <div 
-                key={idx}
-                onClick={() => setActiveDistrict(idx)}
-                className={`cursor-pointer p-6 rounded-2xl border-2 transition-all ${activeDistrict === idx ? 'bg-orange-600 border-orange-600 text-white shadow-lg transform -translate-y-1' : 'bg-white border-slate-200 text-slate-700 hover:border-orange-300'}`}
-              >
-                <div className="flex items-center gap-2 mb-3">
-                  <MapPin size={20} className={activeDistrict === idx ? 'text-orange-200' : 'text-orange-500'} />
-                  <h3 className="font-bold text-lg">{district.name}</h3>
-                </div>
-                <p className={`text-sm leading-relaxed ${activeDistrict === idx ? 'text-orange-50' : 'text-slate-500'}`}>
-                  {district.focus}
-                </p>
-              </div>
-            ))}
-          </div>
+    <section class="content-section">
+      <div class="container grid two gap-12">
+        <div id="agenda" class="agenda">
+          <div class="heading-row"><span style="font-size:32px;color:var(--orange)">📅</span><h2>أجندة الحملة</h2></div>
+          <div id="agendaList" class="event-list"></div>
         </div>
-      </section>
 
-      {/* Middle Section: Agenda & Ask */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-12">
-          
-          {/* Campaign Agenda */}
-          <div id="agenda">
-            <div className="flex items-center gap-3 mb-8">
-              <CalendarDays className="text-orange-500" size={32} />
-              <h2 className="text-3xl font-bold text-slate-800">أجندة الحملة</h2>
-            </div>
-            <div className="space-y-4">
-              {agenda.map((item, idx) => (
-                <div key={idx} className="flex bg-slate-50 border border-slate-100 rounded-xl overflow-hidden hover:shadow-md transition">
-                  <div className="bg-orange-500 text-white p-4 flex flex-col justify-center items-center w-24 shrink-0">
-                    <span className="text-sm font-medium">جوان</span>
-                    <span className="text-2xl font-black">{item.date.split(' ')[0]}</span>
-                  </div>
-                  <div className="p-4 flex flex-col justify-center">
-                    <span className="text-xs font-bold text-orange-600 mb-1 px-2 py-0.5 bg-orange-100 rounded-full inline-block w-fit">{item.type}</span>
-                    <h4 className="font-bold text-slate-800">{item.title}</h4>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Ask the Candidates */}
-          <div id="ask" className="bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden">
-            <div className="absolute -right-10 -top-10 text-slate-800 opacity-50">
-              <MessageSquare size={150} />
-            </div>
-            <div className="relative z-10">
-              <h2 className="text-3xl font-bold mb-2">اسأل مرشحيك</h2>
-              <p className="text-slate-400 mb-6 text-sm">نؤمن بالشفافية المطلقة. اطرح سؤالك الآن، وسيتم الإجابة عن أبرز الأسئلة في بث مباشر دوري.</p>
-              
-              <form onSubmit={handleAskSubmit} className="space-y-4">
-                <div>
-                  <input type="text" placeholder="اسمك (اختياري)" className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-orange-500" />
-                </div>
-                <div>
-                  <textarea required rows="3" placeholder="اكتب سؤالك هنا..." className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-orange-500 resize-none"></textarea>
-                </div>
-                <button type="submit" className="bg-orange-600 hover:bg-orange-500 text-white px-6 py-3 rounded-lg font-bold w-full flex justify-center items-center gap-2 transition">
-                  إرسال السؤال <Send size={18} />
-                </button>
-              </form>
-            </div>
-          </div>
-
+        <div id="ask" class="ask-card">
+          <h2>اسأل مرشحيك للبرلمان</h2>
+          <p>كنائب، مهمتي نقل انشغالك للسلطات المركزية. اطرح سؤالك الآن ليتم مناقشته.</p>
+          <div id="askSuccess" class="success-box hidden">✓ تم إرسال سؤالك بنجاح وسيكون محل اهتمامنا.</div>
+          <form id="askForm">
+            <div class="field"><input type="text" name="name" placeholder="اسمك (اختياري)" /></div>
+            <div class="field"><textarea required name="question" placeholder="ما هو الملف الذي تريدنا أن نرافع عنه في البرلمان؟"></textarea></div>
+            <button type="submit" class="full-btn btn-orange">إرسال الانشغال ✉</button>
+          </form>
         </div>
-      </section>
+      </div>
+    </section>
 
-      {/* Social Proof (Wall of Support) */}
-      <section className="py-16 bg-slate-50 border-t border-slate-200">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-extrabold text-slate-800 mb-4">صوت السطايفية</h2>
-            <p className="text-slate-600">ماذا يقول أبناء ولايتنا عن قائمة حركة مجتمع السلم رقم 05؟</p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-              <div className="flex text-orange-400 mb-4">
-                {'★★★★★'}
-              </div>
-              <p className="text-slate-600 mb-4 font-medium italic">"زكرياء وعبد الله شباب نظاف، يفهموا في الأرقام وفي التسيير. سطيف محتاجة لهاد الكفاءات باش تطور، يستاهلوا كل الدعم."</p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-slate-200 rounded-full"></div>
-                <div>
-                  <h5 className="font-bold text-slate-800 text-sm">أحمد. م</h5>
-                  <span className="text-xs text-slate-500">تاجر بالعلمة</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-              <div className="flex text-orange-400 mb-4">
-                {'★★★★★'}
-              </div>
-              <p className="text-slate-600 mb-4 font-medium italic">"كمواطن، يعجبني فيهم أنهم كبروا في الجمعيات والكشافة، يعني قراب للزوالي وماهمش معزولين في المكاتب. صوتي للقائمة 05 بدون تردد."</p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-slate-200 rounded-full"></div>
-                <div>
-                  <h5 className="font-bold text-slate-800 text-sm">كمال. ب</h5>
-                  <span className="text-xs text-slate-500">أستاذ وعضو جمعوي</span>
-                </div>
-              </div>
-            </div>
+    <section id="join" class="join">
+      <div class="container grid five gap-8">
+        <div class="join-card">
+          <h2>كن جزءاً من آلة التغيير</h2>
+          <p>سجل معنا الآن، كن مندوباً في صندوق الاقتراع، أو متطوعاً إلكترونياً لدعم قائمة حركة مجتمع السلم.</p>
 
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-center items-center text-center group cursor-pointer hover:bg-orange-50 transition">
-              <div className="w-16 h-16 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition">
-                <PlayCircle size={32} />
-              </div>
-              <h5 className="font-bold text-slate-800">شاهد آراء المواطنين</h5>
-              <p className="text-xs text-slate-500 mt-1">اضغط لمشاهدة الفيديو</p>
+          <div id="joinSuccess" class="join-success hidden">
+            <div class="success-icon">✓</div>
+            <h3>مرحباً بك في الفريق!</h3>
+            <p>تم تسجيل بياناتك. لنصنع الفارق معاً.</p>
+            <div class="ref-box">
+              <strong>ضاعف تأثيرك!</strong>
+              <p>شارك هذا الرمز مع أصدقائك لدعوتهم لدعم القائمة 05.</p>
+              <div id="refCode" class="ref-code">SETIF-0000</div>
             </div>
           </div>
+
+          <form id="joinForm">
+            <div class="form-grid">
+              <div class="field"><label>الاسم الكامل</label><input required type="text" name="fullName" /></div>
+              <div class="field"><label>رقم الهاتف</label><input required type="tel" name="phone" dir="ltr" /></div>
+            </div>
+            <div class="field"><label>الدائرة</label><select required id="districtSelect" name="district"><option value="">اختر دائرتك...</option></select></div>
+            <div class="field">
+              <label>كيف يمكنك المساعدة؟</label>
+              <div class="radio-grid">
+                <label class="radio-box"><input type="radio" name="help" value="دعم رقمي" checked /> دعم رقمي</label>
+                <label class="radio-box"><input type="radio" name="help" value="مراقب صندوق" /> مراقب صندوق</label>
+              </div>
+            </div>
+            <button type="submit" class="full-btn btn-dark">تسجيل الانضمام</button>
+          </form>
         </div>
-      </section>
 
-      {/* Gamified Join Form & Media Kit */}
-      <section id="join" className="py-20 bg-orange-600">
-        <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-5 gap-8">
-          
-          {/* Volunteer Form */}
-          <div className="md:col-span-3 bg-white rounded-3xl p-8 shadow-2xl">
-            <h3 className="text-2xl font-black text-slate-800 mb-2">كن جزءاً من آلة التغيير</h3>
-            <p className="text-slate-500 mb-8 text-sm">سجل معنا الآن، كن مندوباً في صندوق الاقتراع، أو متطوعاً إلكترونياً.</p>
-            
-            {formStatus === 'success' ? (
-              <div className="text-center py-8">
-                <div className="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle size={40} />
-                </div>
-                <h4 className="font-bold text-2xl text-slate-800 mb-2">مرحباً بك في الفريق!</h4>
-                <p className="text-slate-600 mb-6">تم تسجيل بياناتك. لنصنع الفارق معاً.</p>
-                
-                <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
-                  <h5 className="font-bold text-slate-800 mb-2 flex items-center justify-center gap-2">
-                    <Share2 size={18} className="text-orange-500" /> ضاعف تأثيرك!
-                  </h5>
-                  <p className="text-sm text-slate-500 mb-4">شارك هذا الرمز مع 5 من أصدقائك لدعوتهم لدعم القائمة. أكثر الداعمين نشاطاً سيتم تكريمهم بعد الانتخابات.</p>
-                  <div className="bg-white border-2 border-dashed border-orange-300 py-3 rounded-lg text-2xl font-mono font-bold tracking-widest text-orange-600 mb-4">
-                    {referralCode}
-                  </div>
-                  <button className="text-sm font-bold text-slate-700 bg-slate-200 px-4 py-2 rounded-lg hover:bg-slate-300 transition">
-                    نسخ الرابط ومشاركته
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <form onSubmit={handleJoinSubmit} className="space-y-5">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-bold text-slate-700 mb-1">الاسم الكامل</label>
-                    <input type="text" required className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-bold text-slate-700 mb-1">رقم الهاتف</label>
-                    <input type="tel" required className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition" dir="ltr" />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1">البلدية</label>
-                  <select required className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition">
-                    <option value="">اختر بلديتك...</option>
-                    <option>سطيف</option><option>العلمة</option><option>عين ولمان</option><option>بوقاعة</option><option>أخرى</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1">كيف يمكنك المساعدة؟</label>
-                  <div className="grid grid-cols-2 gap-3">
-                    <label className="flex items-center gap-2 p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50">
-                      <input type="radio" name="help" className="accent-orange-600 w-4 h-4" /> <span className="text-sm font-medium">دعم رقمي (سوشيال ميديا)</span>
-                    </label>
-                    <label className="flex items-center gap-2 p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50">
-                      <input type="radio" name="help" className="accent-orange-600 w-4 h-4" /> <span className="text-sm font-medium">مراقب صندوق (2 جويلية)</span>
-                    </label>
-                  </div>
-                </div>
-                <button type="submit" className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-xl transition shadow-lg mt-2 text-lg">
-                  تسجيل الانضمام
-                </button>
-              </form>
-            )}
+        <aside id="media-kit" class="media-kit">
+          <div>
+            <h2>الحقيبة الرقمية</h2>
+            <p>أنت سفيرنا للتعريف بالمرشحين. حمّل المواد الإعلامية واستخدمها في حساباتك لتوسيع دائرة الدعم.</p>
+            <button class="download-btn" type="button" onclick="alert('ضع رابط ملف إطار البروفايل هنا.')"><span>إطار صورة بروفايل فيسبوك</span><span>⬇</span></button>
+            <button class="download-btn" type="button" onclick="alert('ضع رابط الملصقات الجاهزة للطباعة هنا.')"><span>ملصقات جاهزة للطباعة</span><span>⬇</span></button>
           </div>
 
-          {/* Media Kit */}
-          <div id="media-kit" className="md:col-span-2 flex flex-col justify-center text-white">
-            <h3 className="text-3xl font-black mb-4">الحقيبة الرقمية</h3>
-            <p className="text-orange-100 mb-8 leading-relaxed">أنت سفيرنا! حمّل المواد الإعلامية للحملة واستخدمها في حساباتك الشخصية لتوسيع دائرة الدعم.</p>
-            
-            <div className="space-y-4">
-              <button className="w-full flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/20 p-4 rounded-xl backdrop-blur-sm transition">
-                <div className="flex items-center gap-3">
-                  <div className="bg-white/20 p-2 rounded-lg"><Share2 size={20} /></div>
-                  <span className="font-bold">إطار صورة بروفايل فيسبوك</span>
-                </div>
-                <Download size={20} />
-              </button>
-              <button className="w-full flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/20 p-4 rounded-xl backdrop-blur-sm transition">
-                <div className="flex items-center gap-3">
-                  <div className="bg-white/20 p-2 rounded-lg"><Download size={20} /></div>
-                  <span className="font-bold">ملصقات جاهزة للطباعة (PDF)</span>
-                </div>
-                <Download size={20} />
-              </button>
-              <button className="w-full flex items-center justify-between bg-white/10 hover:bg-white/20 border border-white/20 p-4 rounded-xl backdrop-blur-sm transition">
-                <div className="flex items-center gap-3">
-                  <div className="bg-white/20 p-2 rounded-lg"><MessageCircle size={20} /></div>
-                  <span className="font-bold">صور حالات واتساب/ستوري</span>
-                </div>
-                <Download size={20} />
-              </button>
+          <div class="ai-card">
+            <h3>✨ مساعد الحملة الذكي</h3>
+            <p>اكتب المطلب الذي تريده لولايتك، وسيتم توليد منشور موجه لدائرتك. يعمل محلياً دون مفتاح API، ويمكنك تفعيل Gemini بوضع مفتاحك اختيارياً.</p>
+            <select id="aiDistrict"></select>
+            <input id="postTopic" type="text" placeholder="موضوع المنشور: مثال تخصيص ميزانية لقطاع الصحة..." />
+            <input id="geminiKey" type="password" placeholder="مفتاح Gemini API اختياري" dir="ltr" />
+            <p class="small-note">اترك مفتاح Gemini فارغاً لتوليد منشور محلي فوري.</p>
+            <button id="generateBtn" type="button" class="full-btn btn-orange">✨ توليد منشور برلماني</button>
+            <p id="aiError" class="error hidden"></p>
+            <div id="aiResultWrap" class="hidden">
+              <div id="aiResult" class="ai-result"></div>
+              <button id="copyBtn" type="button" class="full-btn btn-light" style="margin-top:10px">نسخ النص للمشاركة 📋</button>
+              <p id="copySuccess" class="copy-success hidden">تم نسخ النص بنجاح.</p>
             </div>
           </div>
+        </aside>
+      </div>
+    </section>
+  </main>
 
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="brand">
+          <div class="badge-05" style="background:white;color:var(--orange)">05</div>
+          <div class="brand-title">ثِقَــــة</div>
         </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-12">
-        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8 items-center text-center md:text-right">
-          <div className="flex flex-col items-center md:items-start">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="bg-white text-orange-600 p-1.5 rounded-md font-bold text-xl">05</div>
-              <span className="font-extrabold text-2xl text-white tracking-tight">ثِقَــــة</span>
-            </div>
-            <p className="text-sm max-w-xs">الحملة الانتخابية لمرشحي حركة مجتمع السلم لولاية سطيف - تشريعيات 2 جويلية 2026.</p>
-          </div>
-          <div className="space-x-4 space-x-reverse text-sm">
-            <a href="#" className="hover:text-white transition">سياسة الخصوصية</a>
-            <span>|</span>
-            <a href="#" className="hover:text-white transition">شروط التطوع</a>
-          </div>
-          <div dir="ltr" className="text-sm font-medium">
-            <p>© 2026 List 05 - Setif.</p>
-            <p className="text-xs text-slate-600 mt-1">Powered by Grassroots Engine</p>
-          </div>
-        </div>
-      </footer>
+        <p>الحملة الانتخابية لمرشحي حركة مجتمع السلم لولاية سطيف - تشريعيات 2 جويلية 2026.</p>
+      </div>
+      <div class="footer-links"><a href="#">سياسة الخصوصية</a><span>|</span><a href="#">شروط التطوع</a></div>
+      <div class="ltr">© 2026 List 05 - Setif.</div>
     </div>
-  );
-}
+  </footer>
+
+  <script>
+    "use strict";
+
+    const districts = [
+      { name: 'سطيف', x: 50, y: 55, focus: 'المرافعة لتسجيل مشاريع كبرى لفك الاختناق المروري، وتخصيص ميزانيات للأقطاب الحضرية الذكية.' },
+      { name: 'العلمة', x: 72, y: 52, focus: 'اقتراح تشريعات تحمي الفضاءات التجارية، والمطالبة بتصنيف مناطق نشاطات وطنية جديدة.' },
+      { name: 'عين ولمان', x: 42, y: 72, focus: 'سن قوانين تدعم الصناعات التحويلية، والمرافعة لتمويل المرافق الشبانية والرياضية.' },
+      { name: 'بوقاعة', x: 26, y: 35, focus: 'الضغط في قبة البرلمان لرفع التجميد عن المشاريع الصحية الكبرى وتوسيع البنية التحتية.' },
+      { name: 'عين آزال', x: 62, y: 82, focus: 'المطالبة بتثمين النشاط المنجمي قانونياً وتوجيه عائداته لتحقيق التنمية المحلية المستدامة.' },
+      { name: 'عين أرنات', x: 38, y: 55, focus: 'المرافعة لتوسيع الأنشطة الاقتصادية بمحيط المطار، وتوجيه الدعم المباشر للفلاحين.' },
+      { name: 'عموشة', x: 48, y: 30, focus: 'اقتراح أطر قانونية لتطوير السياحة الجبلية وحماية الفلاح الجبلي في قوانين المالية.' },
+      { name: 'بابور', x: 55, y: 15, focus: 'المطالبة بميزانيات قطاعية خاصة لفك العزلة عن المشاتي وتأهيل السياحة الشتوية.' },
+      { name: 'بني عزيز', x: 70, y: 22, focus: 'المرافعة لتسجيل مشاريع شبكات طرق وطنية وولائية لدعم الاستثمار الفلاحي والغابي.' },
+      { name: 'بني ورتيلان', x: 12, y: 20, focus: 'المطالبة بقوانين تحمي الصناعات التقليدية، وتخصيص أغلفة مالية لفك العزلة التامة.' },
+      { name: 'بئر العرش', x: 86, y: 56, focus: 'الدفاع عن حقوق الفلاحين عند مناقشة ميزانية الدولة، والمطالبة بآليات سقي حديثة.' },
+      { name: 'بوعنداس', x: 25, y: 12, focus: 'المرافعة لترقية الخدمات الصحية الجوارية لتصبح مؤسسات استشفائية في ميزانية الصحة.' },
+      { name: 'جميلة', x: 80, y: 32, focus: 'اقتراح تشريعات لتثمين الموروث الأثري وتحويله لمورد اقتصادي يخلق مناصب شغل.' },
+      { name: 'عين الكبيرة', x: 55, y: 32, focus: 'المطالبة بتوجيه الاستثمارات الصناعية الكبرى لخلق قطب حضري متكامل الخدمات.' },
+      { name: 'قنزات', x: 10, y: 32, focus: 'المرافعة لتصنيف وحماية التراث المعماري وطنياً، وتخصيص أغلفة لتهيئة الطرق.' },
+      { name: 'قجال', x: 55, y: 62, focus: 'الدفاع الشرس عن مربي المواشي والفلاحين عند مناقشة قوانين الدعم الفلاحي بالبرلمان.' },
+      { name: 'حمام السخنة', x: 82, y: 70, focus: 'المطالبة بتشريعات ترقي السياحة الحموية لتكون قاطرة حقيقية للتنمية المحلية.' },
+      { name: 'حمام قرقور', x: 22, y: 28, focus: 'المرافعة لجلب استثمارات كبرى في قطاع السياحة العلاجية والحفاظ على البيئة.' },
+      { name: 'ماوكلان', x: 20, y: 22, focus: 'الضغط لتوفير آليات تمويل وطنية مبسطة للمشاريع الشبانية المصغرة والناشئة.' },
+      { name: 'صالح باي', x: 40, y: 88, focus: 'المطالبة بتسجيل مشاريع مرافق ترفيهية ورياضية حقيقية ضمن الميزانية المخصصة للولاية.' }
+    ];
+
+    const agenda = [
+      { date: '15 جوان', title: 'لقاء مع ممثلي المجتمع المدني - العلمة', type: 'عمل جواري' },
+      { date: '18 جوان', title: 'ندوة حول واقع الاستثمار بولاية سطيف', type: 'تجمع' },
+      { date: '21 جوان', title: 'بث مباشر: ما هو دور النائب الحقيقي؟', type: 'رقمي' },
+      { date: '28 جوان', title: 'التجمع الشعبي الختامي الكبير', type: 'تجمع' }
+    ];
+
+    const $ = (id) => document.getElementById(id);
+    let activeDistrictIndex = null;
+
+    function updateCountdown() {
+      const targetDate = new Date('2026-07-02T08:00:00+01:00').getTime();
+      const now = Date.now();
+      const distance = Math.max(0, targetDate - now);
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      $('days').textContent = days;
+      $('hours').textContent = hours;
+      $('minutes').textContent = minutes;
+      $('seconds').textContent = seconds;
+    }
+
+    function populateSelects() {
+      const districtSelect = $('districtSelect');
+      const aiDistrict = $('aiDistrict');
+      districts.forEach((d) => {
+        const option1 = document.createElement('option');
+        option1.value = d.name;
+        option1.textContent = d.name;
+        districtSelect.appendChild(option1);
+
+        const option2 = document.createElement('option');
+        option2.value = d.name;
+        option2.textContent = d.name;
+        aiDistrict.appendChild(option2);
+      });
+      aiDistrict.value = 'سطيف';
+    }
+
+    function renderAgenda() {
+      $('agendaList').innerHTML = agenda.map((item) => {
+        const day = item.date.split(' ')[0];
+        return `
+          <article class="event">
+            <div class="event-date"><div><small>جوان</small><strong>${escapeHtml(day)}</strong></div></div>
+            <div class="event-body"><span class="tag">${escapeHtml(item.type)}</span><h3>${escapeHtml(item.title)}</h3></div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function renderPins() {
+      const pins = $('districtPins');
+      pins.innerHTML = '';
+      districts.forEach((district, index) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'pin-wrap';
+        wrap.style.left = district.x + '%';
+        wrap.style.top = district.y + '%';
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'pin-button' + (activeDistrictIndex === index ? ' active' : '');
+        btn.setAttribute('aria-label', 'عرض مطلب دائرة ' + district.name);
+        btn.innerHTML = `<span class="pin-dot"></span><span class="pin-name">${escapeHtml(district.name)}</span>`;
+        btn.addEventListener('click', () => toggleDistrict(index));
+
+        wrap.appendChild(btn);
+        pins.appendChild(wrap);
+      });
+    }
+
+    function toggleDistrict(index) {
+      activeDistrictIndex = activeDistrictIndex === index ? null : index;
+      renderPins();
+      renderPopup();
+    }
+
+    function renderPopup() {
+      const popup = $('districtPopup');
+      if (activeDistrictIndex === null) {
+        popup.className = 'hidden';
+        popup.innerHTML = '';
+        return;
+      }
+      const d = districts[activeDistrictIndex];
+      popup.className = 'popup';
+      popup.style.left = getPopupLeft(d.x);
+      popup.style.top = getPopupTop(d.y);
+      popup.style.right = 'auto';
+      popup.style.bottom = 'auto';
+      popup.innerHTML = `
+        <button type="button" class="close-popup" aria-label="إغلاق">×</button>
+        <h3><span>${escapeHtml(d.name)}</span> تستحق أن نرافع عنها لـ:</h3>
+        <p>${escapeHtml(d.focus)}</p>
+        <a href="#join" class="full-btn btn-orange">ادعم ممثلي ولايتك الآن ←</a>
+      `;
+      popup.querySelector('.close-popup').addEventListener('click', () => {
+        activeDistrictIndex = null;
+        renderPins();
+        renderPopup();
+      });
+    }
+
+    function getPopupLeft(x) {
+      if (x > 66) return (x - 31) + '%';
+      if (x < 28) return (x + 5) + '%';
+      return (x + 5) + '%';
+    }
+
+    function getPopupTop(y) {
+      if (y > 70) return (y - 33) + '%';
+      return (y + 3) + '%';
+    }
+
+    function setupForms() {
+      $('joinForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const code = 'SETIF-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+        $('refCode').textContent = code;
+        $('joinForm').classList.add('hidden');
+        $('joinSuccess').classList.remove('hidden');
+      });
+
+      $('askForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        $('askForm').classList.add('hidden');
+        $('askSuccess').classList.remove('hidden');
+        setTimeout(() => {
+          $('askSuccess').classList.add('hidden');
+          $('askForm').classList.remove('hidden');
+          e.target.reset();
+        }, 4000);
+      });
+
+      $('generateBtn').addEventListener('click', generatePost);
+      $('copyBtn').addEventListener('click', copyPost);
+    }
+
+    function buildPrompt(districtName, topic) {
+      return `أنت خبير تسويق سياسي وكاتب محتوى محترف لحملة انتخابية برلمانية في الجزائر.
+اكتب منشور فيسبوك حماسي، مقنع، وقصير لا يتجاوز 100 كلمة باللغة العربية الفصحى لدعم المرشحين عبد الله بلعربي وزكرياء خبشاش لعضوية المجلس الشعبي الوطني عن ولاية سطيف. يمثلان القائمة رقم 05 عن حركة مجتمع السلم بمشروع برنامج ثقة.
+المنشور موجه لسكان دائرة ${districtName} ويركز على موضوع ${topic}. أبرز دور النائب في التشريع، الرقابة، والمرافعة لجلب المشاريع والميزانيات. اختم بهاشتاجات: #سطيف #برلمان_2026 #حركة_مجتمع_السلم #برنامج_ثقة #القائمة_05 #${districtName.replace(/\s+/g, '_')}`;
+    }
+
+    function localPost(districtName, topic) {
+      const district = districts.find((d) => d.name === districtName) || districts[0];
+      return `أهلنا في ${districtName}، إن ملف ${topic} ليس وعداً عابراً، بل قضية تحتاج صوتاً برلمانياً يعرف كيف يشرّع، يراقب، ويراكم الضغط القانوني لجلب المشاريع والميزانيات.
+
+مع عبد الله بلعربي وزكرياء خبشاش، القائمة 05، سيكون مطلب ${districtName} حاضراً في قبة البرلمان ضمن برنامج ثقة: ${district.focus}
+
+يوم 2 جويلية، امنحوا سطيف صوتاً قوياً ومسؤولاً.
+
+#سطيف #برلمان_2026 #حركة_مجتمع_السلم #برنامج_ثقة #القائمة_05 #${districtName.replace(/\s+/g, '_')}`;
+    }
+
+    async function generatePost() {
+      const districtName = $('aiDistrict').value;
+      const topic = $('postTopic').value.trim();
+      const apiKey = $('geminiKey').value.trim();
+      const error = $('aiError');
+      const result = $('aiResult');
+      const wrap = $('aiResultWrap');
+      const btn = $('generateBtn');
+
+      error.classList.add('hidden');
+      error.textContent = '';
+      $('copySuccess').classList.add('hidden');
+
+      if (!topic) {
+        error.textContent = 'الرجاء كتابة الموضوع الذي تريد التحدث عنه أولاً.';
+        error.classList.remove('hidden');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '✨ جاري كتابة المنشور...';
+
+      try {
+        if (!apiKey) {
+          result.textContent = localPost(districtName, topic);
+          wrap.classList.remove('hidden');
+          return;
+        }
+
+        const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + encodeURIComponent(apiKey), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts: [{ text: buildPrompt(districtName, topic) }] }] })
+        });
+
+        const data = await response.json();
+        const text = data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
+
+        if (!response.ok || !text) {
+          throw new Error(data && data.error && data.error.message ? data.error.message : 'تعذر توليد المنشور عبر Gemini.');
+        }
+
+        result.textContent = text;
+        wrap.classList.remove('hidden');
+      } catch (err) {
+        result.textContent = localPost(districtName, topic);
+        wrap.classList.remove('hidden');
+        error.textContent = 'تعذر الاتصال بـ Gemini، لذلك تم توليد منشور محلي بديل.';
+        error.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '✨ توليد منشور برلماني';
+      }
+    }
+
+    async function copyPost() {
+      const text = $('aiResult').textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (err) {
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        document.body.removeChild(temp);
+      }
+      $('copySuccess').classList.remove('hidden');
+      setTimeout(() => $('copySuccess').classList.add('hidden'), 2200);
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+      populateSelects();
+      renderAgenda();
+      renderPins();
+      setupForms();
+    });
+  </script>
+</body>
+</html>
